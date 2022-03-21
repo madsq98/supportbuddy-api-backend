@@ -36,11 +36,10 @@ namespace SB.WebAPI
             services.AddControllers();
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "SB.WebAPI", Version = "v1"}); });
 
-            Console.WriteLine(Configuration["SQLServer:ConnectionString"]);
             //Application DB Context
             services.AddDbContext<SbContext>(opt =>
             {
-                opt.UseMySQL(Configuration["SQLServer:ConnectionString"]);
+                opt.UseMySQL(Configuration.GetConnectionString("DefaultConnection"));
             });
             
             //CORS Policy Setup
