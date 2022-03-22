@@ -5,6 +5,7 @@ services:
     build:
       context: "SB.WebAPI"
     container_name: "supportbuddy-api-container"
+    network_mode: bridge
     ports:
       - "8091:80"
       - "3306:3306"
