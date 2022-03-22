@@ -82,6 +82,8 @@ namespace SB.WebAPI
             }
             else
             {
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SB.WebAPI v1"));
                 app.UseCors("Prod-cors");
             }
             

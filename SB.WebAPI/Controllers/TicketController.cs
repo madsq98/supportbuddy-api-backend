@@ -84,9 +84,7 @@ namespace SB.WebAPI.Controllers
             }
             catch (Exception e)
             {
-                throw e;
-                return StatusCode(500, new Error_DTO_Out(500, e.Message));
-                //return StatusCode(500, new Error_DTO_Out(500, ApiStrings.InternalServerError));
+                return StatusCode(500, new Error_DTO_Out(500, ApiStrings.InternalServerError));
             }
         }
 
