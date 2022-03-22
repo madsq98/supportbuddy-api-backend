@@ -4,7 +4,6 @@ services:
   api:
     build:
       context: "SB.WebAPI"
-      network_mod: host
     container_name: "supportbuddy-api-container"
     ports:
       - "8091:80"
