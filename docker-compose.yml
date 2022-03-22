@@ -8,3 +8,5 @@ services:
     ports:
       - "8091:80"
       - "3306:3306"
+    extra_hosts:
+      - "dbhostaddress:94.231.103.43"
