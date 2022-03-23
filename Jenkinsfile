@@ -7,6 +7,15 @@ pipeline{
 	
     stages{
         stage("Build API") {
+			when {
+				anyOf {
+					changeset "SB.Core/**"
+					changeset "SB.CoreDomainTest/**"
+					changeset "SB.Domain/**"
+					changeset "SB.EFCore/**"
+					changeset "SB.WebAPI/**"
+				}
+			}
             steps{
                 sh "dotnet build --configuration Release"
                 sh "docker-compose build api"
