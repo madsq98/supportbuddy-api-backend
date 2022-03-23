@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SB.WebAPI.DTO;
 using SB.WebAPI.DTO.TicketDTO;
+using SB.WebAPI.DTO.TicketDTO.AnswerDTO;
 
 namespace SB.WebAPI.Controllers
 {
@@ -16,9 +17,9 @@ namespace SB.WebAPI.Controllers
     [ApiController]
     public class TicketController : ControllerBase
     {
-        private readonly I_RW_Service<Ticket> _service;
+        private readonly ITicketService _service;
 
-        public TicketController(I_RW_Service<Ticket> service)
+        public TicketController(ITicketService service)
         {
             _service = service;
         }
@@ -140,7 +141,29 @@ namespace SB.WebAPI.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, new Error_DTO_Out(500, e.Message));
+                return StatusCode(500, new Error_DTO_Out(500, ApiStrings.InternalServerError));
+            }
+        }
+        
+        // POST: api/Ticket/5
+        [HttpPost("{id:int}")]
+        public ActionResult<Ticket_DTO_Out> PostAnswer(int id, [FromBody] Answer_DTO_In obj)
+        {
+            try
+            {
+                return Ok(Conversion(_service.AddAnswer(new Ticket {Id = id}, new Answer {Message = obj.Message})));
+            }
+            catch (InvalidDataException e)
+            {
+                return BadRequest(new Error_DTO_Out(400, e.Message));
+            }
+            catch (FileNotFoundException e)
+            {
+                return NotFound(new Error_DTO_Out(404, e.Message));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new Error_DTO_Out(500, ApiStrings.InternalServerError));
             }
         }
 
@@ -154,7 +177,16 @@ namespace SB.WebAPI.Controllers
                 Email = obj.UserInfo.Email,
                 FirstName = obj.UserInfo.FirstName,
                 LastName = obj.UserInfo.LastName,
-                PhoneNumber = obj.UserInfo.PhoneNumber
+                PhoneNumber = obj.UserInfo.PhoneNumber,
+                Answers = obj.Answers.Select(answer => new Answer_DTO_Out
+                {
+                    Id = answer.Id,
+                    AuthorFirstName = answer.Author.FirstName,
+                    AuthorLastName = answer.Author.LastName,
+                    Message = answer.Message,
+                    TimeStamp = answer.TimeStamp
+                }).ToList(),
+                TimeStamp = obj.TimeStamp
             };
         }
     }

@@ -64,9 +64,11 @@ namespace SB.WebAPI
             services.AddHttpContextAccessor();
 
             services.AddScoped<I_RW_Repository<Ticket>,TicketRepository>();
-            services.AddScoped<I_RW_Service<Ticket>, TicketService>();
+            services.AddScoped<ITicketService, TicketService>();
 
             services.AddScoped<I_RW_Repository<UserInfo>, UserInfoRepository>();
+
+            services.AddScoped<I_RW_Repository<Answer>, AnswerRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

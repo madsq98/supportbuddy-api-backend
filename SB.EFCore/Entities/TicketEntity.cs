@@ -1,4 +1,7 @@
-﻿namespace SB.EFCore.Entities
+﻿using System;
+using System.Collections.Generic;
+
+namespace SB.EFCore.Entities
 {
     public class TicketEntity
     {
@@ -11,5 +14,9 @@
         public string Subject { get; set; }
         
         public string Message { get; set; }
+        
+        public IEnumerable<AnswerEntity> Answers { get; set; }
+        
+        public DateTime TimeStamp { get; set; }
     }
 }

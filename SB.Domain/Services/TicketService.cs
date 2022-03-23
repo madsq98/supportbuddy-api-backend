@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using Core.IServices;
@@ -7,7 +8,7 @@ using SB.Domain.IRepositories;
 
 namespace SB.Domain.Services
 {
-    public class TicketService : I_RW_Service<Ticket>
+    public class TicketService : ITicketService
     {
         private const string
             InvalidSubject = DomainStrings.InvalidData + " Subject length must be over zero.",
@@ -18,10 +19,12 @@ namespace SB.Domain.Services
             InvalidPhoneNumber = DomainStrings.InvalidData + " Phone number length must be over zero and under nine.";
         
         private readonly I_RW_Repository<Ticket> _repo;
+        private readonly I_RW_Repository<Answer> _answerRepo;
 
-        public TicketService(I_RW_Repository<Ticket> repo)
+        public TicketService(I_RW_Repository<Ticket> repo, I_RW_Repository<Answer> answerRepo)
         {
             _repo = repo;
+            _answerRepo = answerRepo;
         }
         
         public Ticket GetOneById(int id)
@@ -90,6 +93,41 @@ namespace SB.Domain.Services
                 throw new InvalidDataException(InvalidPhoneNumber);
 
             return true;
+        }
+
+        public Ticket AddAnswer(Ticket ticket, Answer answer)
+        {
+            if (answer.Message.Length <= 0)
+                throw new InvalidDataException(InvalidMessage);
+
+
+            var currentTicket = _repo.GetOneById(ticket.Id);
+            answer.Author = new UserInfo {Id = currentTicket.UserInfo.Id};
+            answer.TimeStamp = DateTime.Now;
+            currentTicket.Answers.Add(answer);
+
+            return _repo.Update(currentTicket);
+        }
+
+        public Ticket UpdateAnswer(Ticket ticket, Answer answer)
+        {
+            if (answer.Message.Length <= 0)
+                throw new InvalidDataException(InvalidMessage);
+
+            _answerRepo.Update(answer);
+
+            return _repo.GetOneById(ticket.Id);
+        }
+
+        public Ticket DeleteAnswer(Ticket ticket, Answer answer)
+        {
+            if (answer.Id <= 0 || ticket.Id <= 0) 
+                throw new InvalidDataException(DomainStrings.IdMustBeOverZero);
+            
+            _answerRepo.Delete(answer);
+
+            return _repo.GetOneById(ticket.Id);
+
         }
     }
 }

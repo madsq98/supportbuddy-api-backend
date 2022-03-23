@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Core.Models;
@@ -51,7 +52,8 @@ namespace SB.EFCore.Repositories
             {
                 Subject = obj.Subject,
                 Message = obj.Message,
-                UserInfoId = userInfoEntityId
+                UserInfoId = userInfoEntityId,
+                TimeStamp = DateTime.Now
             }).Entity;
             _ctx.SaveChanges();
 
@@ -64,13 +66,24 @@ namespace SB.EFCore.Repositories
             obj.UserInfo.Id = currentEntity.UserInfo.Id;
 
             _userInfoRepo.Update(obj.UserInfo);
-            
+
+            if (obj.Answers == null || obj.Answers.Count == 0)
+                obj.Answers = currentEntity.Answers;
+
             var newEntity = new TicketEntity
             {
                 Id = obj.Id,
                 Subject = obj.Subject,
                 Message = obj.Message,
-                UserInfoId = obj.UserInfo.Id
+                UserInfoId = obj.UserInfo.Id,
+                Answers = obj.Answers.Select(answer => new AnswerEntity
+                {
+                    Id = answer.Id,
+                    AuthorId = answer.Author.Id,
+                    Message = answer.Message,
+                    TimeStamp = answer.TimeStamp
+                }).ToList(),
+                TimeStamp = obj.TimeStamp
             };
             _ctx.ChangeTracker.Clear();
             _ctx.Tickets.Update(newEntity);
@@ -82,6 +95,10 @@ namespace SB.EFCore.Repositories
         public Ticket Delete(Ticket obj)
         {
             var entity = GetOneById(obj.Id);
+            foreach (var answer in entity.Answers)
+            {
+                _ctx.Answers.Remove(new AnswerEntity {Id = answer.Id});
+            }
             _ctx.Tickets.Remove(new TicketEntity {Id = entity.Id});
             _ctx.SaveChanges();
 
@@ -104,7 +121,22 @@ namespace SB.EFCore.Repositories
                         FirstName = ticket.UserInfo.FirstName,
                         LastName = ticket.UserInfo.LastName,
                         PhoneNumber = ticket.UserInfo.PhoneNumber
-                    }
+                    },
+                    Answers = ticket.Answers.Select(answer => new Answer
+                    {
+                        Id = answer.Id,
+                        Message = answer.Message,
+                        TimeStamp = answer.TimeStamp,
+                        Author = new UserInfo
+                        {
+                            Id = answer.Author.Id,
+                            Email = answer.Author.Email,
+                            FirstName = answer.Author.FirstName,
+                            LastName = answer.Author.LastName,
+                            PhoneNumber = answer.Author.PhoneNumber
+                        }
+                    }).ToList(),
+                    TimeStamp = ticket.TimeStamp
                 });
         }
     }

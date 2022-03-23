@@ -1,20 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Core.Models
 {
-    public class Ticket
+    public class Answer
     {
         public int Id { get; set; }
         
-        public UserInfo UserInfo { get; set; }
-
-        public string Subject { get; set; }
+        public UserInfo Author { get; set; }
         
         public string Message { get; set; }
         
-        public ICollection<Answer> Answers { get; set; }
-
         public DateTime TimeStamp { get; set; }
     }
 }

@@ -12,5 +12,7 @@ namespace SB.EFCore
         public DbSet<TicketEntity> Tickets { get; set; }
         
         public DbSet<UserInfoEntity> UserInfoEntities { get; set; }
+        
+        public DbSet<AnswerEntity> Answers { get; set; }
     }
 }
