@@ -145,7 +145,7 @@ namespace SB.WebAPI.Controllers
             }
         }
         
-        // POST: api/Ticket/5
+        // POST: api/Ticket/6
         [HttpPost("{id:int}")]
         public ActionResult<Ticket_DTO_Out> PostAnswer(int id, [FromBody] Answer_DTO_In obj)
         {
