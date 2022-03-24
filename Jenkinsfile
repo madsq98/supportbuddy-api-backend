@@ -22,7 +22,9 @@ pipeline{
             }
 			post {
 				always{
-					discordSend description: "Jenkins Pipeline Build", footer: "Footer Text", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "https://discord.com/api/webhooks/951841557940690966/KsQ0net7a-3dNpUttCtGhzeCKQO3vICrGxiHzn_huasmVlmPB-4bnfJBVcdnwr3_dJGX"
+					withCredentials([string(credentialsId: 'WEBHOOKURL', variable: 'WEBHOOK_URL')]) {
+						discordSend description: "Jenkins Pipeline Build", footer: "Footer Text", link: env.BUILD_URL, result: currentBuild.currentResult, title: JOB_NAME, webhookURL: "${WEBHOOK_URL}"
+					}
 				}
 			}
         }
