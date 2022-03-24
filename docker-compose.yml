@@ -4,5 +4,5 @@ services:
   api:
     build:
       context: "SB.WebAPI"
-    container_name: "supportbuddy-api-container"
+    container_name: "supportbuddy-api-container-new"
     network_mode: host
