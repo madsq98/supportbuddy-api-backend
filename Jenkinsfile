@@ -42,7 +42,7 @@ pipeline{
     			}
     		post {
         		success {
-            			publishCoverage adapters: [coberturaAdapter(path: "GodFestNu.CoreDomainTest/TestResults/*/coverage.cobertura.xml")] 
+            			publishCoverage adapters: [coberturaAdapter(path: "SB.CoreDomainTest/TestResults/*/coverage.cobertura.xml")] 
         			}
     			}
 		}
