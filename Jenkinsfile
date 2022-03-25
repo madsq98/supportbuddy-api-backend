@@ -6,6 +6,11 @@ pipeline{
 	}
 	
     stages{
+		stage("Cleanup") {
+			steps{
+				sh "rm -r SB.CoreDomainTest/TestResults"
+			}
+		}
         stage("Build API") {
 			when {
 				anyOf {
