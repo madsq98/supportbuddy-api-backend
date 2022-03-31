@@ -8,7 +8,7 @@ pipeline{
     stages{
 		stage("Cleanup") {
 			steps{
-				sh "rm -r SB.CoreDomainTest/TestResults"
+				sh "rm -r -f SB.CoreDomainTest/TestResults"
 			}
 		}
         stage("Build API") {
