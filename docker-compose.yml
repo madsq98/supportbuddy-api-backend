@@ -15,7 +15,7 @@ services:
     container_name: "supportbuddy-db-container"
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=supportBuddyDatabase123!$
+      - SA_PASSWORD=supportBuddyDatabase123!
     ports:
       - "8989:1433"
     volumes:
