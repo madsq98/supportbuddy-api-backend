@@ -5,4 +5,21 @@ services:
     build:
       context: "SB.WebAPI"
     container_name: "supportbuddy-api-container-new"
-    network_mode: host
+    ports:
+      - "8980:80"
+    depends_on:
+      - "db"
+    
+  db:
+    image: "mcr.microsoft.com/mssql/server"
+    container_name: "supportbuddy-db-container"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=supportBuddyDatabase123!$
+    ports:
+      - "8989:1433"
+    volumes:
+      - supportBuddyData:/var/opt/mssql:rw
+    
+volumes:
+    supportBuddyData:

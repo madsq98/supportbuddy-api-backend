@@ -39,7 +39,7 @@ namespace SB.WebAPI
             //Application DB Context
             services.AddDbContext<SbContext>(opt =>
             {
-                opt.UseMySQL(Configuration.GetConnectionString("DefaultConnection"));
+                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
             
             //CORS Policy Setup
