@@ -8,7 +8,7 @@ services:
     ports:
       - "8980:80"
     depends_on:
-      - "db"
+      - db
     
   db:
     image: "mcr.microsoft.com/mssql/server"
