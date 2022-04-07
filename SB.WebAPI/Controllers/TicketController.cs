@@ -32,6 +32,9 @@ namespace SB.WebAPI.Controllers
             _authorizationReader = new BasicAuthorizationReader();
         }
 
+        /// <summary>
+        /// Get a list of all support tickets
+        /// </summary>
         // GET: api/Ticket
         [HttpGet]
         public ActionResult<IEnumerable<Ticket_DTO_Out>> Get()
@@ -46,6 +49,9 @@ namespace SB.WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Get a specific support ticket by ID
+        /// </summary>
         // GET: api/Ticket/5
         [HttpGet("{id:int}", Name = "Get")]
         public ActionResult<Ticket_DTO_Out> Get(int id)
@@ -68,6 +74,9 @@ namespace SB.WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Create a new support ticket
+        /// </summary>
         // POST: api/Ticket
         [HttpPost]
         public ActionResult<Ticket_DTO_Out> Post([FromBody] Ticket_DTO_In value)
@@ -97,6 +106,9 @@ namespace SB.WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Update a support ticket
+        /// </summary>
         // PUT: api/Ticket/5
         [HttpPut("{id:int}")]
         public ActionResult<Ticket_DTO_Out> Put(int id, [FromBody] Ticket_DTO_In value)
@@ -131,6 +143,9 @@ namespace SB.WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Delete a support ticket
+        /// </summary>
         // DELETE: api/Ticket/5
         [HttpDelete("{id:int}")]
         public ActionResult<Ticket_DTO_Out> Delete(int id)
@@ -153,6 +168,10 @@ namespace SB.WebAPI.Controllers
             }
         }
         
+        /// <summary>
+        /// Post an answer on a support ticket
+        /// </summary>
+        /// <remarks>If authorized as a supporter the answer will be from there, otherwise it will be from the ticket author.</remarks>
         // POST: api/Ticket/6
         [HttpPost("{id:int}")]
         public ActionResult<Ticket_DTO_Out> PostAnswer(int id, [FromBody] Answer_DTO_In obj)
@@ -188,6 +207,9 @@ namespace SB.WebAPI.Controllers
             }
         }
         
+        /// <summary>
+        /// Change the status of a support ticket to Closed
+        /// </summary>
         // POST: api/ticket/6/close
         [HttpPost("{id:int}/close")]
         public ActionResult<Ticket_DTO_Out> CloseTicket(int id)

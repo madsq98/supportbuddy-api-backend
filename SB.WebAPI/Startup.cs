@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.IServices;
@@ -39,6 +40,10 @@ namespace SB.WebAPI
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "SB.WebAPI", Version = "v1"});
+                
+                var filePath = Path.Combine(System.AppContext.BaseDirectory, "SB.WebAPI.xml");
+                c.IncludeXmlComments(filePath);
+                
                 c.AddSecurityDefinition("basic", new OpenApiSecurityScheme  
                 {  
                     Name = "Authorization",  

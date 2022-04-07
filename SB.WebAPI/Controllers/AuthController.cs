@@ -28,6 +28,9 @@ namespace SB.WebAPI.Controllers
             _service = service;
         }
 
+        /// <summary>
+        /// Checks if specified username and password is correct
+        /// </summary>
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public ActionResult<Login_DTO_Out> Login([FromBody] Login_DTO_In data)
@@ -57,6 +60,9 @@ namespace SB.WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets a list of all supporters
+        /// </summary>
         [HttpGet]
         public ActionResult<IEnumerable<Supporter_DTO_Out>> GetAll()
         {
@@ -70,6 +76,9 @@ namespace SB.WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets one supporter - specified by ID
+        /// </summary>
         [HttpGet("{id:int}")]
         public ActionResult<Supporter_DTO_Out> GetOne(int id)
         {
@@ -91,6 +100,9 @@ namespace SB.WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Create a supporter
+        /// </summary>
         [HttpPost]
         public ActionResult<Supporter_DTO_Out> CreateSupporter([FromBody] Supporter_DTO_In data)
         {
@@ -119,6 +131,9 @@ namespace SB.WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Update details for a supporter
+        /// </summary>
         [HttpPut("{id:int}")]
         public ActionResult<Supporter_DTO_Out> UpdateSupporter(int id, [FromBody] Supporter_DTO_In data)
         {
@@ -152,6 +167,9 @@ namespace SB.WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Delete a supporter
+        /// </summary>
         [HttpDelete("{id:int}")]
         public ActionResult<Supporter_DTO_Out> Delete(int id)
         {
