@@ -53,6 +53,7 @@ namespace SB.EFCore.Repositories
                 Subject = obj.Subject,
                 Message = obj.Message,
                 UserInfoId = userInfoEntityId,
+                Status = 0,
                 TimeStamp = DateTime.Now
             }).Entity;
             _ctx.SaveChanges();
@@ -76,6 +77,7 @@ namespace SB.EFCore.Repositories
                 Subject = obj.Subject,
                 Message = obj.Message,
                 UserInfoId = obj.UserInfo.Id,
+                Status = (obj.Status == TicketStatus.Open) ? 0 : 1,
                 Answers = obj.Answers.Select(answer => new AnswerEntity
                 {
                     Id = answer.Id,
@@ -122,6 +124,7 @@ namespace SB.EFCore.Repositories
                         LastName = ticket.UserInfo.LastName,
                         PhoneNumber = ticket.UserInfo.PhoneNumber
                     },
+                    Status = (ticket.Status == 0) ? TicketStatus.Open : TicketStatus.Closed,
                     Answers = ticket.Answers.Select(answer => new Answer
                     {
                         Id = answer.Id,

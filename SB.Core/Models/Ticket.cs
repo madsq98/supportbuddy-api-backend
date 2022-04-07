@@ -8,6 +8,8 @@ namespace Core.Models
         public int Id { get; set; }
         
         public UserInfo UserInfo { get; set; }
+        
+        public TicketStatus Status { get; set; }
 
         public string Subject { get; set; }
         

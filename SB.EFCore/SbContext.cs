@@ -14,5 +14,7 @@ namespace SB.EFCore
         public DbSet<UserInfoEntity> UserInfoEntities { get; set; }
         
         public DbSet<AnswerEntity> Answers { get; set; }
+        
+        public DbSet<SupporterEntity> Supporters { get; set; }
     }
 }

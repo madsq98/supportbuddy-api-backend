@@ -16,7 +16,8 @@ namespace SB.Domain.Services
             InvalidEmail = DomainStrings.InvalidData + " Email must be longer than zero and be correctly formatted.",
             InvalidFirstName = DomainStrings.InvalidData + " First Name length must be over zero",
             InvalidLastName = DomainStrings.InvalidData + " Last Name length must be over zero",
-            InvalidPhoneNumber = DomainStrings.InvalidData + " Phone number length must be over zero and under nine.";
+            InvalidPhoneNumber = DomainStrings.InvalidData + " Phone number length must be over zero and under nine.",
+            StatusIsClosed = "It is not possible to update tickets with Status: Closed";
         
         private readonly I_RW_Repository<Ticket> _repo;
         private readonly I_RW_Repository<Answer> _answerRepo;
@@ -50,18 +51,17 @@ namespace SB.Domain.Services
 
         public Ticket Store(Ticket obj)
         {
-            if (Validate(obj))
-                return _repo.Insert(obj);
-
-            return null;
+            return Validate(obj) ? _repo.Insert(obj) : null;
         }
 
         public Ticket Update(Ticket obj)
         {
-            if (Validate(obj))
-                return _repo.Update(obj);
+            var currentTicket = _repo.GetOneById(obj.Id);
 
-            return null;
+            if (currentTicket.Status == TicketStatus.Closed)
+                throw new InvalidDataException(StatusIsClosed);
+            
+            return Validate(obj) ? _repo.Update(obj) : null;
         }
 
         public Ticket Delete(Ticket obj)
@@ -102,7 +102,28 @@ namespace SB.Domain.Services
 
 
             var currentTicket = _repo.GetOneById(ticket.Id);
+
+            if (currentTicket.Status == TicketStatus.Closed)
+                throw new InvalidDataException(StatusIsClosed);
+            
             answer.Author = new UserInfo {Id = currentTicket.UserInfo.Id};
+            answer.TimeStamp = DateTime.Now;
+            currentTicket.Answers.Add(answer);
+
+            return _repo.Update(currentTicket);
+        }
+
+        public Ticket AddAnswer(Ticket ticket, Answer answer, int supporterUserId)
+        {
+            if (answer.Message.Length <= 0)
+                throw new InvalidDataException(InvalidMessage);
+
+            var currentTicket = _repo.GetOneById(ticket.Id);
+            
+            if (currentTicket.Status == TicketStatus.Closed)
+                throw new InvalidDataException(StatusIsClosed);
+            
+            answer.Author = new UserInfo {Id = supporterUserId};
             answer.TimeStamp = DateTime.Now;
             currentTicket.Answers.Add(answer);
 
@@ -128,6 +149,17 @@ namespace SB.Domain.Services
 
             return _repo.GetOneById(ticket.Id);
 
+        }
+
+        public Ticket CloseTicket(Ticket ticket)
+        {
+            if (ticket.Id <= 0)
+                throw new InvalidDataException(DomainStrings.IdMustBeOverZero);
+
+            var currentTicket = _repo.GetOneById(ticket.Id);
+            currentTicket.Status = TicketStatus.Closed;
+
+            return Update(currentTicket);
         }
     }
 }

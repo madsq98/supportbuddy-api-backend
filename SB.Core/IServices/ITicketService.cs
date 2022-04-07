@@ -7,8 +7,12 @@ namespace Core.IServices
     {
         public Ticket AddAnswer(Ticket ticket, Answer answer);
 
+        public Ticket AddAnswer(Ticket ticket, Answer answer, int supporterUserId);
+
         public Ticket UpdateAnswer(Ticket ticket, Answer answer);
 
         public Ticket DeleteAnswer(Ticket ticket, Answer answer);
+
+        public Ticket CloseTicket(Ticket ticket);
     }
 }

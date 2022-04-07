@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.IServices;
 using Core.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -18,6 +19,7 @@ using SB.Domain.IRepositories;
 using SB.Domain.Services;
 using SB.EFCore;
 using SB.EFCore.Repositories;
+using SB.WebAPI.Middleware;
 
 namespace SB.WebAPI
 {
@@ -34,7 +36,35 @@ namespace SB.WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "SB.WebAPI", Version = "v1"}); });
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "SB.WebAPI", Version = "v1"});
+                c.AddSecurityDefinition("basic", new OpenApiSecurityScheme  
+                {  
+                    Name = "Authorization",  
+                    Type = SecuritySchemeType.Http,  
+                    Scheme = "basic",  
+                    In = ParameterLocation.Header,  
+                    Description = "Basic Authorization header using the Bearer scheme."  
+                });  
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement  
+                {  
+                    {  
+                        new OpenApiSecurityScheme  
+                        {  
+                            Reference = new OpenApiReference  
+                            {  
+                                Type = ReferenceType.SecurityScheme,  
+                                Id = "basic"  
+                            }  
+                        },  
+                        new string[] {}  
+                    }  
+                });  
+            });
+
+            services.AddAuthentication("BasicAuthentication")
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
             
             //Application DB Context
             services.AddDbContext<SbContext>(opt =>
@@ -63,6 +93,9 @@ namespace SB.WebAPI
             });
 
             services.AddHttpContextAccessor();
+            
+            services.AddScoped<I_RW_Repository<Supporter>,SupporterRepository>();
+            services.AddScoped<ISupporterService, SupporterService>();
 
             services.AddScoped<I_RW_Repository<Ticket>,TicketRepository>();
             services.AddScoped<ITicketService, TicketService>();
@@ -101,6 +134,7 @@ namespace SB.WebAPI
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });

@@ -11,6 +11,8 @@ namespace SB.EFCore.Entities
         
         public int UserInfoId { get; set; }
         
+        public int Status { get; set; }
+        
         public string Subject { get; set; }
         
         public string Message { get; set; }
