@@ -23,7 +23,7 @@ services:
       
   portainer:
     image: portainer/portainer-ce
-    container_name: "portainer"
+    container_name: "portainer-new"
     ports:
       - "7001:9000"
     volumes:
