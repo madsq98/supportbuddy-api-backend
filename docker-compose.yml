@@ -4,7 +4,7 @@ services:
   api:
     build:
       context: "SB.WebAPI"
-    container_name: "supportbuddy-api-container-new"
+    container_name: "supportbuddy-api-container-stage"
     ports:
       - "8980:80"
     depends_on:
