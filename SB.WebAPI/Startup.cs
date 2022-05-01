@@ -21,6 +21,7 @@ using SB.Domain.Services;
 using SB.EFCore;
 using SB.EFCore.Repositories;
 using SB.WebAPI.Middleware;
+using SB.WebAPI.Util;
 
 namespace SB.WebAPI
 {
@@ -108,6 +109,11 @@ namespace SB.WebAPI
             services.AddScoped<I_RW_Repository<UserInfo>, UserInfoRepository>();
 
             services.AddScoped<I_RW_Repository<Answer>, AnswerRepository>();
+
+            services.AddScoped<I_RW_Repository<LiveChat>, LiveChatRepository>();
+            services.AddScoped<ILiveChatService, LiveChatService>();
+
+            services.AddSingleton<IWebsocketHandler, WebsocketHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline..
@@ -134,6 +140,8 @@ namespace SB.WebAPI
                 //ctx.Database.EnsureDeleted();
                 ctx.Database.EnsureCreated();
             }
+
+            app.UseWebSockets();
 
             app.UseHttpsRedirection();
 
