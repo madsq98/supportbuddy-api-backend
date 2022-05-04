@@ -60,7 +60,7 @@ namespace SB.WebAPI.Util
                 {
                     if (supporter != null)
                     {
-                        service.AddMessage(liveChat, new Message {Text = message}, supporter.Id);
+                        service.AddMessage(liveChat, new Message {Text = message}, supporter.UserInfo.Id);
                         return $"{supporter.UserInfo.FirstName} {supporter.UserInfo.LastName}: {message}";
                     }
                     else

@@ -85,7 +85,7 @@ namespace SB.WebAPI
                 options.AddPolicy("Dev-cors", policy =>
                 {
                     policy
-                        .WithOrigins("http://localhost:4200")
+                        .AllowAnyOrigin()
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
