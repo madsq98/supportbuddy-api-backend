@@ -98,6 +98,27 @@ namespace SB.WebAPI.Controllers
                 return StatusCode(500, new Error_DTO_Out(500, ApiStrings.InternalServerError));
             }
         }
+        
+        [HttpDelete("{id:int}")]
+        public ActionResult<LiveChat_DTO_Out> Delete(int id)
+        {
+            try
+            {
+                return Ok(Conversion(_service.Delete(new LiveChat {Id = id})));
+            }
+            catch (InvalidDataException e)
+            {
+                return BadRequest(new Error_DTO_Out(400, e.Message));
+            }
+            catch (FileNotFoundException e)
+            {
+                return NotFound(new Error_DTO_Out(404, e.Message));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new Error_DTO_Out(500, ApiStrings.InternalServerError));
+            }
+        }
 
         [HttpGet("/ws/{id:int}")]
         public async Task Get(int id)
