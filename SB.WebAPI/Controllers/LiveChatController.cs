@@ -52,6 +52,27 @@ namespace SB.WebAPI.Controllers
             }
         }
 
+        [HttpGet("/api/livechat/{id:int}")]
+        public ActionResult<LiveChat_DTO_Out> GetOne(int id)
+        {
+            try
+            {
+                return Ok(Conversion(_service.GetOneById(id)));
+            }
+            catch (InvalidDataException e)
+            {
+                return BadRequest(new Error_DTO_Out(400, e.Message));
+            }
+            catch (FileNotFoundException e)
+            {
+                return NotFound(new Error_DTO_Out(404, e.Message));
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new Error_DTO_Out(500, ApiStrings.InternalServerError));
+            }
+        }
+
         [HttpPost("/api/livechat")]
         public ActionResult<LiveChat_DTO_Out> Create([FromBody] LiveChat_DTO_In data)
         {
