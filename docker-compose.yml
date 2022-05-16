@@ -20,14 +20,6 @@ services:
       - "8989:1433"
     volumes:
       - supportBuddyData:/var/opt/mssql:rw
-  portainer:
-    image: portainer/portainer-ce
-    container_name: "portainer"
-    ports:
-      - "7001:9000"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - "portainer_data:/data"
   docker-registry:
     image: "registry"
     volumes:

@@ -145,6 +145,8 @@ namespace SB.WebAPI
                 ctx.Database.EnsureCreated();
             }
             
+            var dir = System.IO.Directory.CreateDirectory("Uploads");
+            
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(
