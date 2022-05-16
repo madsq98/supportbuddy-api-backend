@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
@@ -112,6 +113,9 @@ namespace SB.WebAPI
 
             services.AddScoped<I_RW_Repository<LiveChat>, LiveChatRepository>();
             services.AddScoped<ILiveChatService, LiveChatService>();
+            
+            services.AddScoped<I_W_Repository<Attachment>, AttachmentRepository>();
+            services.AddScoped<IAttachmentService, AttachmentService>();
 
             services.AddSingleton<IWebsocketHandler, WebsocketHandler>();
         }
@@ -140,6 +144,13 @@ namespace SB.WebAPI
                 //ctx.Database.EnsureDeleted();
                 ctx.Database.EnsureCreated();
             }
+            
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(env.ContentRootPath, "Uploads")),
+                RequestPath = "/attachments"
+            });
 
             app.UseWebSockets();
 

@@ -15,6 +15,8 @@ namespace SB.EFCore
         
         public DbSet<AnswerEntity> Answers { get; set; }
         
+        public DbSet<AttachmentEntity> Attachments { get; set; }
+
         public DbSet<SupporterEntity> Supporters { get; set; }
         
         public DbSet<LiveChatEntity> LiveChats { get; set; }

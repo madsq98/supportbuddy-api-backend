@@ -10,6 +10,8 @@ namespace Core.Models
         
         public string Message { get; set; }
         
+        public Attachment? Attachment { get; set; }
+        
         public DateTime TimeStamp { get; set; }
     }
 }
