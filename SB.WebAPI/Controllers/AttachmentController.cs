@@ -44,10 +44,10 @@ namespace SB.WebAPI.Controllers
                 await using var stream = System.IO.File.Create(fullPath);
                 await file.CopyToAsync(stream);
 
-                return Ok(Conversion(new Attachment
+                return Ok(Conversion(_service.Store(new Attachment
                 {
                     Url = Configuration["SupportBuddySettings:Url"] + "/attachments/" + fileName
-                }));
+                })));
             }
             catch (InvalidDataException e)
             {
