@@ -12,6 +12,8 @@ namespace SB.WebAPI.DTO.TicketDTO.AnswerDTO
         
         public string Message { get; set; }
         
+        public string? AttachmentUrl { get; set; }
+        
         public DateTime TimeStamp { get; set; }
     }
 }

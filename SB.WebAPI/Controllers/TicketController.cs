@@ -186,11 +186,11 @@ namespace SB.WebAPI.Controllers
                     var supporterUserId = _supporterService.CheckLogin(supporterUsername, supporterPassword);
                     var supporterUserInfo = _supporterService.GetOneById(supporterUserId).UserInfo;
 
-                    return Ok(Conversion(_service.AddAnswer(new Ticket {Id = id}, new Answer {Message = obj.Message}, supporterUserInfo.Id)));
+                    return Ok(Conversion(_service.AddAnswer(new Ticket {Id = id}, new Answer {Message = obj.Message, Attachment = new Attachment { Id = obj.AttachmentId ?? 0 }}, supporterUserInfo.Id)));
                 }
                 catch (InvalidDataException e)
                 {
-                    return Ok(Conversion(_service.AddAnswer(new Ticket {Id = id}, new Answer {Message = obj.Message})));
+                    return Ok(Conversion(_service.AddAnswer(new Ticket {Id = id}, new Answer {Message = obj.Message, Attachment = new Attachment { Id = obj.AttachmentId ?? 0 }})));
                 }
             }
             catch (InvalidDataException e)
@@ -201,10 +201,7 @@ namespace SB.WebAPI.Controllers
             {
                 return NotFound(new Error_DTO_Out(404, e.Message));
             }
-            catch (Exception e)
-            {
-                return StatusCode(500, new Error_DTO_Out(500, ApiStrings.InternalServerError));
-            }
+            
         }
         
         /// <summary>
@@ -250,6 +247,7 @@ namespace SB.WebAPI.Controllers
                     AuthorFirstName = answer.Author.FirstName,
                     AuthorLastName = answer.Author.LastName,
                     Message = answer.Message,
+                    AttachmentUrl = answer.Attachment?.Url,
                     TimeStamp = answer.TimeStamp
                 }).ToList(),
                 TimeStamp = obj.TimeStamp

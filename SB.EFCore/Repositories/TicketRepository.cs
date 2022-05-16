@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Core.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using SB.Domain.IRepositories;
 using SB.EFCore.Entities;
 
@@ -78,12 +79,22 @@ namespace SB.EFCore.Repositories
                 Message = obj.Message,
                 UserInfoId = obj.UserInfo.Id,
                 Status = (obj.Status == TicketStatus.Open) ? 0 : 1,
-                Answers = obj.Answers.Select(answer => new AnswerEntity
+                Answers = obj.Answers.Select(answer =>
                 {
-                    Id = answer.Id,
-                    AuthorId = answer.Author.Id,
-                    Message = answer.Message,
-                    TimeStamp = answer.TimeStamp
+                    var aEntity = new AnswerEntity
+                    {
+                        Id = answer.Id,
+                        AuthorId = answer.Author.Id,
+                        Message = answer.Message,
+                        TimeStamp = answer.TimeStamp
+                    };
+
+                    if (answer.Attachment is {Id: > 0})
+                    {
+                        aEntity.AttachmentId = answer.Attachment.Id;
+                    }
+
+                    return aEntity;
                 }).ToList(),
                 TimeStamp = obj.TimeStamp
             };
@@ -129,6 +140,11 @@ namespace SB.EFCore.Repositories
                     {
                         Id = answer.Id,
                         Message = answer.Message,
+                        Attachment = (answer.AttachmentId != null) ? new Attachment
+                        {
+                            Id = answer.AttachmentId ?? 0,
+                            Url = answer.Attachment.Url
+                        } : null,
                         TimeStamp = answer.TimeStamp,
                         Author = new UserInfo
                         {

@@ -12,6 +12,10 @@ namespace SB.EFCore.Entities
         
         public string Message { get; set; }
         
+        public int? AttachmentId { get; set; }
+        
+        public AttachmentEntity? Attachment { get; set; }
+        
         public DateTime TimeStamp { get; set; }
     }
 }

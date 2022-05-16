@@ -3,5 +3,7 @@
     public class Answer_DTO_In
     {
         public string Message { get; set; }
+        
+        public int? AttachmentId { get; set; }
     }
 }
