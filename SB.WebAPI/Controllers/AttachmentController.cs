@@ -53,10 +53,11 @@ namespace SB.WebAPI.Controllers
             {
                 return BadRequest(new Error_DTO_Out(400, e.Message));
             }
+            /*
             catch (Exception e)
             {
                 return StatusCode(500, new Error_DTO_Out(500, ApiStrings.InternalServerError));
-            }
+            }*/
         }
 
         private Attachment_DTO_Out Conversion(Attachment obj)
