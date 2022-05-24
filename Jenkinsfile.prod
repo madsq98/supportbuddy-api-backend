@@ -1,7 +1,7 @@
 pipeline {
     agent any
     parameters {
-        run filter: 'SUCCESSFUL', name: 'PROMOTED_BUILD', projectName: 'WeatherForecast'
+        run filter: 'SUCCESSFUL', name: 'PROMOTED_BUILD', projectName: 'EXAM - SupportBuddy .NET Backend'
     }
     stages {
         stage("Deploy to production") {
