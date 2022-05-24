@@ -76,7 +76,7 @@ namespace SB.WebAPI
             //Application DB Context
             services.AddDbContext<SbContext>(opt =>
             {
-                //We proudly use Microsoft SQL Server - and accept the EULA!!
+                //We proudly use Microsoft SQL Server - and accept the EULA!
                 var connString = (Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") != null)
                     ? Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")
                     : Configuration.GetConnectionString("DefaultConnection");
