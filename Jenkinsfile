@@ -33,19 +33,20 @@ pipeline{
 				}
 			}
         }
-        stage("Test") {
+        stage("Unit Test") {
    			steps {
-        			dir("SB.CoreDomainTest") {
-            				sh "dotnet add package coverlet.collector"
-            				sh "dotnet test --collect:'XPlat Code Coverage'"
-        			}
-    			}
+        		dir("SB.CoreDomainTest") {
+            		sh "dotnet add package coverlet.collector"
+            		sh "dotnet test --collect:'XPlat Code Coverage'"
+        		}
+    		}
     		post {
         		success {
-            			publishCoverage adapters: [coberturaAdapter(path: "SB.CoreDomainTest/TestResults/*/coverage.cobertura.xml")] 
-        			}
-    			}
+            		publishCoverage adapters: [coberturaAdapter(path: "SB.CoreDomainTest/TestResults/*/coverage.cobertura.xml")] 
+        		}
+    		}
 		}
+	
         stage("Clean containers") {
             steps {
                 script {
@@ -61,6 +62,17 @@ pipeline{
                 sh "docker-compose --env-file config/Stage.env up -d"
             }
         }
+		stage("Performance Test") {
+			steps {
+				echo 'Installing k6'
+				sh 'sudo chmod +x setup_k6.sh'
+				sh 'sudo ./setup_k6.sh'
+				sh 'k6 SB.WebAPI.Tests/StressTest.js'
+				sh 'k6 SB.WebAPI.Tests/SpikeTest.js'
+				sh 'k6 SB.WebAPI.Tests/LoadTest.js'
+				echo 'Completed Performance Tests!'
+			}
+		}
 		stage("Push to registry") {
 			steps {
 				sh "docker-compose --env-file config/Stage.env push"
