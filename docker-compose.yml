@@ -4,20 +4,22 @@ services:
   api:
     build:
       context: "SB.WebAPI"
-    container_name: "supportbuddy-api-container-stage"
+    container_name: "${API_CONT_NAME}"
     ports:
-      - "8980:80"
+      - "${API_PORT}:80"
     depends_on:
       - db
+    environment:
+      - DB_CONNECTION_STRING=Server=Server=${DB_CONT_NAME};Database=sbdb_staging;User=sa;Password=supportBuddyDatabase123!;MultipleActiveResultSets=True;
     
   db:
     image: "mcr.microsoft.com/mssql/server"
-    container_name: "supportbuddy-db-container"
+    container_name: "${DB_CONT_NAME}"
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=supportBuddyDatabase123!
     ports:
-      - "8989:1433"
+      - "${DB_PORT}:1433"
     volumes:
       - supportBuddyData:/var/opt/mssql:rw
   docker-registry:

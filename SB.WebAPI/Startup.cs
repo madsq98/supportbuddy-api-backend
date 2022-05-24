@@ -77,7 +77,11 @@ namespace SB.WebAPI
             services.AddDbContext<SbContext>(opt =>
             {
                 //We proudly use Microsoft SQL Server - and accept the EULA!!
-                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                var connString = (Environment.GetEnvironmentVariable("DB_CONNECTION_STRING") != null)
+                    ? Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")
+                    : Configuration.GetConnectionString("DefaultConnection");
+                
+                opt.UseSqlServer(connString);
             });
             
             //CORS Policy Setup

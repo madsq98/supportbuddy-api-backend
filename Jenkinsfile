@@ -23,7 +23,7 @@ pipeline{
 			}
             steps{
                 sh "dotnet build --configuration Release"
-                sh "docker-compose build api"
+                sh "docker-compose --env-file config/Stage.env build api"
             }
 			post {
 				always{
@@ -50,7 +50,7 @@ pipeline{
             steps {
                 script {
                     try {
-                        sh "docker-compose down"
+                        sh "docker-compose --env-file config/Stage.env down"
                     }
                     finally { }
                 }
@@ -58,8 +58,13 @@ pipeline{
         }
         stage("Deploy") {
             steps {
-                sh "docker-compose up -d"
+                sh "docker-compose --env-file config/Stage.env up -d"
             }
         }
+		stage("Push to registry") {
+			steps {
+				sh "docker-compose --env-file config/Stage.env push"
+			}
+		}
     }
 }
