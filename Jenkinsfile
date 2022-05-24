@@ -65,8 +65,8 @@ pipeline{
 		stage("Performance Test") {
 			steps {
 				echo 'Installing k6'
-				sh 'sudo chmod +x setup_k6.sh'
-				sh 'sudo ./setup_k6.sh'
+				sh 'chmod +x setup_k6.sh'
+				sh './setup_k6.sh'
 				sh 'k6 SB.WebAPI.Tests/StressTest.js'
 				sh 'k6 SB.WebAPI.Tests/SpikeTest.js'
 				sh 'k6 SB.WebAPI.Tests/LoadTest.js'
