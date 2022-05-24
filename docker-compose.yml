@@ -10,7 +10,7 @@ services:
     depends_on:
       - db
     environment:
-      - DB_CONNECTION_STRING=Server=Server=${DB_CONT_NAME};Database=sbdb_staging;User=sa;Password=supportBuddyDatabase123!;MultipleActiveResultSets=True;
+      - DB_CONNECTION_STRING=Server=${DB_CONT_NAME};Database=sbdb_staging;User=sa;Password=supportBuddyDatabase123!;MultipleActiveResultSets=True;
     
   db:
     image: "mcr.microsoft.com/mssql/server"
